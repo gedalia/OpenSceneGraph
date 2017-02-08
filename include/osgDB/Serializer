@@ -776,11 +776,13 @@ public:
         if ( is.isBinary() )
         {
             is >> size;
-
-            list.resize(size);
-            osgDB::InputIterator * iter = is.getInputIterator();
-            iter->getStream()->read((char*)&list[0], sizeof(ValueType)*size);
-            
+            list.reserve(size);
+            for ( unsigned int i=0; i<size; ++i )
+            {
+                ValueType value;
+                is >> value;
+                list.push_back( value );
+            }
             if ( size>0 ) (object.*_setter)( list );
         }
         else if ( is.matchString(_name) )
@@ -1033,6 +1035,159 @@ public:
 };
 
 
+void inline swapBytesHelper(signed char * value){
+   // noop
+}
+void inline swapBytesHelper(unsigned char * value){
+   // noop
+}
+void inline swapBytesHelper(unsigned short * value){
+   osg::swapBytes(value);
+}
+void inline swapBytesHelper(unsigned int * value){
+   osg::swapBytes(value);
+}
+void inline swapBytesHelper(short * value){
+   osg::swapBytes(value);
+}
+void inline swapBytesHelper(float * value){
+   osg::swapBytes(value);
+}
+void inline swapBytesHelper(int * value){
+   osg::swapBytes(value);
+}
+void inline swapBytesHelper(double * value){
+   osg::swapBytes(value);
+}
+
+void inline swapBytesHelper(osg::Vec2ub * value){
+   osg::swapBytes(value[0]);
+   osg::swapBytes(value[1]);
+}
+void inline swapBytesHelper(osg::Vec2b * value){
+   osg::swapBytes(value[0]);
+   osg::swapBytes(value[1]);
+}
+void inline swapBytesHelper(osg::Vec2f * value){
+   osg::swapBytes(value[0]);
+   osg::swapBytes(value[1]);
+}
+void inline swapBytesHelper(osg::Vec2i * value){
+   osg::swapBytes(value[0]);
+   osg::swapBytes(value[1]);
+}
+
+void inline swapBytesHelper(osg::Vec2ui * value){
+   osg::swapBytes(value[0]);
+   osg::swapBytes(value[1]);
+}
+
+void inline swapBytesHelper(osg::Vec2d * value){
+   osg::swapBytes(value[0]);
+   osg::swapBytes(value[1]);
+}
+void inline swapBytesHelper(osg::Vec2s * value){
+   osg::swapBytes(value[0]);
+   osg::swapBytes(value[1]);
+}
+void inline swapBytesHelper(osg::Vec2us * value){
+   osg::swapBytes(value[0]);
+   osg::swapBytes(value[1]);
+}
+
+void inline swapBytesHelper(osg::Vec3ub * value){
+   osg::swapBytes(value[0]);
+   osg::swapBytes(value[1]);
+   osg::swapBytes(value[2]);
+}
+
+void inline swapBytesHelper(osg::Vec3b * value){
+   osg::swapBytes(value[0]);
+   osg::swapBytes(value[1]);
+   osg::swapBytes(value[2]);
+}
+void inline swapBytesHelper(osg::Vec3f * value){
+   osg::swapBytes(value[0]);
+   osg::swapBytes(value[1]);
+   osg::swapBytes(value[2]);
+}
+void inline swapBytesHelper(osg::Vec3d * value){
+   osg::swapBytes(value[0]);
+   osg::swapBytes(value[1]);
+   osg::swapBytes(value[2]);
+}
+
+void inline swapBytesHelper(osg::Vec3i * value){
+   osg::swapBytes(value[0]);
+   osg::swapBytes(value[1]);
+   osg::swapBytes(value[2]);
+}
+void inline swapBytesHelper(osg::Vec3ui * value){
+   osg::swapBytes(value[0]);
+   osg::swapBytes(value[1]);
+   osg::swapBytes(value[2]);
+}
+void inline swapBytesHelper(osg::Vec3s * value){
+   osg::swapBytes(value[0]);
+   osg::swapBytes(value[1]);
+   osg::swapBytes(value[2]);
+}
+
+void inline swapBytesHelper(osg::Vec3us * value){
+   osg::swapBytes(value[0]);
+   osg::swapBytes(value[1]);
+   osg::swapBytes(value[2]);
+}
+
+void inline swapBytesHelper(osg::Vec4ub * value){
+   osg::swapBytes(value[0]);
+   osg::swapBytes(value[1]);
+   osg::swapBytes(value[2]);
+   osg::swapBytes(value[3]);
+}
+void inline swapBytesHelper(osg::Vec4b * value){
+   osg::swapBytes(value[0]);
+   osg::swapBytes(value[1]);
+   osg::swapBytes(value[2]);
+   osg::swapBytes(value[3]);
+}
+void inline swapBytesHelper(osg::Vec4f * value){
+   osg::swapBytes(value[0]);
+   osg::swapBytes(value[1]);
+   osg::swapBytes(value[2]);
+   osg::swapBytes(value[3]);
+}
+void inline swapBytesHelper(osg::Vec4d * value){
+   osg::swapBytes(value[0]);
+   osg::swapBytes(value[1]);
+   osg::swapBytes(value[2]);
+   osg::swapBytes(value[3]);
+}
+void inline swapBytesHelper(osg::Vec4i * value){
+   osg::swapBytes(value[0]);
+   osg::swapBytes(value[1]);
+   osg::swapBytes(value[2]);
+   osg::swapBytes(value[3]);
+}
+void inline swapBytesHelper(osg::Vec4ui * value){
+   osg::swapBytes(value[0]);
+   osg::swapBytes(value[1]);
+   osg::swapBytes(value[2]);
+   osg::swapBytes(value[3]);
+}
+void inline swapBytesHelper(osg::Vec4s * value){
+   osg::swapBytes(value[0]);
+   osg::swapBytes(value[1]);
+   osg::swapBytes(value[2]);
+   osg::swapBytes(value[3]);
+}
+void inline swapBytesHelper(osg::Vec4us * value){
+   osg::swapBytes(value[0]);
+   osg::swapBytes(value[1]);
+   osg::swapBytes(value[2]);
+   osg::swapBytes(value[3]);
+}
+
 template<typename C>
 class IsAVectorSerializer : public VectorBaseSerializer
 {
@@ -1106,9 +1261,20 @@ public:
         {
            is >> size;
            
-	   list.resize(size);
-           osgDB::InputIterator * iter = is.getInputIterator();
-           iter->getStream()->read((char*)&list[0], sizeof(ValueType)*size);
+           if (size > 0)
+           {
+             list.resize(size);
+             osgDB::InputIterator * iter = is.getInputIterator();
+             iter->getStream()->read((char*)&list[0], sizeof(ValueType)*size);
+             
+             if (iter->getByteSwap())
+             {
+                for (unsigned int i = 0; i < size; ++i)
+                {
+                   swapBytesHelper(&list[i]);
+                }
+             }
+           }
         }
         else if ( is.matchString(_name) )
         {
