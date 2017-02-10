@@ -396,6 +396,7 @@ std::string osgDB::getRealPath(const std::string& path)
    std::string retval = getRealPath_internal(path);
    OpenThreads::ScopedLock<OpenThreads::Mutex> lock(s_Mutex);
    s_real_path_lookup[path] = retval;
+   return retval;
 }
 
 namespace osgDB
